@@ -1,8 +1,8 @@
 import asyncio
 import time
 
-from actor import Actor
-from actor_system import ActorSystem
+from pytheater.actor import Actor
+from pytheater.actor_system import ActorSystem
 
 
 class Hello(Actor):
