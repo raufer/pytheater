@@ -8,31 +8,25 @@ from asyncio import run_coroutine_threadsafe
 from asyncio import Future
 from asyncio.queues import Queue
 
+from system import SystemThread
+from utils.async import start_event_loop
 from pytheater.actor_address import ActorAddress
 from pytheater.store import Store
-from pytheater.utils import gen_uuid
+from pytheater.utils.identifier import gen_uuid
 
 
-class ActorSystem:
+class ActorSystem(SystemThread):
 
     def __init__(self):
-        self.loop: AbstractEventLoop = asyncio.new_event_loop()
         self.actors_in_play = []
-
-        self.thread = threading.Thread(target=start_event_loop, args=(self.loop,))
-        self.thread.start()
+        super(ActorSystem, self).__init__()
 
     def create_actor(self, actor_class) -> ActorAddress:
         actor = actor_class(system=self)
         mailbox = create_mailbox(self.loop)
         address = ActorAddress(destination=mailbox, uuid=gen_uuid(), system=self)
-
         self.actors_in_play.append(self.schedule(self.on_stage(actor, mailbox)))
         return address
-
-    def schedule(self, coro: Coroutine) -> Future:
-        future = run_coroutine_threadsafe(coro, self.loop)
-        return future
 
     async def on_stage(self, actor, mailbox):
         while True:
@@ -43,11 +37,6 @@ class ActorSystem:
                 break
 
             actor.receive(message)
-
-
-def start_event_loop(loop:AbstractEventLoop):
-    asyncio.set_event_loop(loop)
-    loop.run_forever()
 
 
 def create_mailbox(loop: AbstractEventLoop):
