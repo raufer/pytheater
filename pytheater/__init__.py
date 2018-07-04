@@ -1,1 +1,1 @@
-from pytheater.system.actor_system import ActorSystem
+from pytheater.core.actor_system import ActorSystem

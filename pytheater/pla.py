@@ -2,14 +2,22 @@ import asyncio
 import time
 
 from pytheater.actor import Actor
-from pytheater.actor_system import ActorSystem
+from pytheater.core.actor_system import ActorSystem
 
 
 class Hello(Actor):
 
+    def constructor(self):
+        self.state = {
+            'counter': 1
+        }
+
     def receive(self, message):
         time.sleep(2)
-        print(f"Received: {message}")
+
+        print(f"Received: {message}. Current state: {self.state}")
+
+        self.next_state({'counter': + self.state['counter'] + 1})
 
     def __repr__(self):
         return "Actor: Hello"

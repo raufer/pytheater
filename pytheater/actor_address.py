@@ -2,17 +2,17 @@
 
 class ActorAddress:
 
-    def __init__(self, destination, uuid, system):
-        self.destination = destination
+    def __init__(self, mailbox, uuid, system):
+        self.mailbox = mailbox
         self.uuid = uuid
         self.system = system
 
-    async def new_message(self, message):
-        await self.destination.put(message)
+    async def send(self, message):
+        await self.mailbox.put(message)
 
     def tell(self, message):
         print(f"Telling message {message}")
-        self.system.schedule(self.new_message(message))
+        self.system.schedule(self.send(message))
 
     def __repr__(self):
         return f"Address: [{self.uuid}]"
