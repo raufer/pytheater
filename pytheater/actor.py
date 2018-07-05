@@ -1,13 +1,13 @@
 from abc import ABC
 from abc import abstractmethod
 
-from pytheater.core.actor_system import ActorSystem
+from actor_address import ActorAddress
 
 
 class Actor(ABC):
 
     def __init__(self, system=None, uuid=None):
-        self.system: ActorSystem = system
+        self.system: 'ActorSystem' = system
         self.uuid = uuid
         self.state = None
 
@@ -15,7 +15,7 @@ class Actor(ABC):
         self.state = {}
 
     @abstractmethod
-    def receive(self, message, sender=None):
+    def receive(self, message, sender: ActorAddress):
         pass
 
     def next_state(self, new_state) -> None:
