@@ -18,7 +18,7 @@ class SystemEventLoop(ABC):
         self.thread = threading.Thread(target=start_event_loop, args=(self.loop,))
         self.thread.start()
 
-    def schedule(self, coro: Coroutine[Any, Any, Any]) -> Future:
+    def schedule(self, coro: AsyncGeneratorType) -> Future:
         future = run_coroutine_threadsafe(coro, self.loop)
         return future
 

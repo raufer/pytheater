@@ -18,7 +18,7 @@ class Hello(Actor):
         print(f"Received: {message} from {sender}. Current state: {self.state}")
         self.next_state({'counter': + self.state['counter'] + 1})
 
-        sender.tell("Here is your answers")
+        sender.tell("Here is your answer")
 
     def __repr__(self):
         return "Actor: Hello"
